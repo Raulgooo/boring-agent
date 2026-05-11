@@ -1,6 +1,6 @@
-# Boring Agent
+# The Super Boring Agent
 
-> Not another chatbot.
+> 
 > A self-hosted agent home server that can remember, research, build, test, and improve its own tools.
 
 ```mermaid

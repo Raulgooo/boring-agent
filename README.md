@@ -36,7 +36,7 @@ Boring Agent starts as dual dogfood:
 The intended architecture is a Go core with specialized subsystems around it:
 
 - Go home orchestrator
-- Postgres + pgvector for durable state and memory search
+- SQLite-first storage for durable state and memory search, behind an adapter so Postgres/vector backends can be added later
 - Append-only event/trace log
 - Web dashboard
 - Official/managed WhatsApp adapter

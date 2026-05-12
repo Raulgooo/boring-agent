@@ -3,7 +3,7 @@
 Boring Agent is a self-hosted, self-improving agent home server. It lives on a VPS, researches for action, forges shareable capabilities, remembers across time, communicates through normal-user channels like WhatsApp, and exposes its inner state through a visual lab and operator dashboard.
 
 **Type:** Application  
-**Stack:** Go core, polyglot worker blocks, Postgres/pgvector, Docker Compose on VPS, official WhatsApp channel, web dashboard  
+**Stack:** Go core, polyglot worker blocks, SQLite-first storage adapter, Docker Compose on VPS, official WhatsApp channel, web dashboard  
 **Skill Loadout:** PAUL, AEGIS/security-auditor, ui-ux-pro-max/frontend-design, openai-docs, Superpowers planning/TDD/verification  
 **Quality Gates:** tests, sandbox gates, memory eval harness, security audit, traceability, rollback, accessibility/performance for UI
 
@@ -23,7 +23,8 @@ The core thesis is that the current bottleneck with agents is the user's capabil
 Boring Agent uses a boring, durable core with flexible capability execution around it.
 
 - **Go home orchestrator:** owns missions, policies, eventing, traces, scheduling, workers, and state transitions.
-- **Postgres + pgvector:** durable state, memory metadata, relational indexes, and semantic search.
+- **SQLite-first storage adapter:** durable state, memory metadata, relational indexes, FTS/search, and snapshots for a single-owner VPS, with a clean adapter path to Postgres/vector backends later.
+- **Evokoa relationship layer:** graph-shaped traversal over existing Boring Agent data without moving source-of-truth records out of SQLite.
 - **Append-only event/trace log:** source of truth for mission timelines, debugging, replay, and user trust.
 - **Web dashboard:** Normal View for friendly operation and Boring View for power-user observability.
 - **Official/managed WhatsApp adapter:** first normal-user communication surface.
@@ -54,7 +55,7 @@ Core entities:
 - Room/Lab Object
 - Self-Update
 
-Memory is first-class and benchmark-oriented from day one. It includes raw, episodic, semantic, procedural, reflective, identity/persona, and endocrine/control memory.
+Memory is first-class and benchmark-oriented from day one. It includes raw, episodic, semantic, procedural, reflective, identity/persona, and endocrine/control memory. Evokoa is the planned traversal layer for connected memory: SQLite keeps the source-of-truth records in Phase 1, while Evokoa keeps relationship traversal fast for agent queries across missions, traces, memories, artifacts, blocks, policies, and evals.
 
 ## API Surface
 

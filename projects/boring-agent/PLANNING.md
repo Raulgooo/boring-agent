@@ -4,7 +4,7 @@
 
 **Created:** 2026-05-10  
 **Type:** Application  
-**Stack:** Go core, polyglot worker blocks, Postgres/pgvector, Docker Compose on VPS, official WhatsApp channel, web dashboard  
+**Stack:** Go core, polyglot worker blocks, SQLite-first storage adapter, Docker Compose on VPS, official WhatsApp channel, web dashboard  
 **Skill Loadout:** PAUL, AEGIS/security-auditor, ui-ux-pro-max/frontend-design, openai-docs, Superpowers planning/TDD/verification  
 **Quality Gates:** tests, sandbox gates, memory eval harness, security audit, traceability, rollback, accessibility/performance for UI
 
@@ -32,7 +32,7 @@ Boring Agent should use a boring, durable core with flexible capability executio
 | Frontend | Web dashboard, likely React/TypeScript | Best fit for a rich Normal View, Boring View, trace UI, filesystem browser, and graph visualization. |
 | Backend | Go core orchestrator | Strong performance, concurrency, long-running service reliability, and a good fit for scheduling, eventing, workers, policies, and trace pipelines. |
 | Workers | Polyglot process/container blocks | Lets the agent create capabilities in Go, Python, TypeScript, or other languages without coupling them to the core process. |
-| Database | Postgres + pgvector | Durable state, relational metadata, trace indexing, memory records, vector search, and a practical self-hosted baseline. |
+| Database | SQLite-first storage adapter | Durable state, relational metadata, trace indexing, memory records, FTS/search, easy snapshots, and simpler self-hosted operation on a single VPS. Keep storage interfaces abstract so Postgres/vector backends can be added later if needed. |
 | Object/Artifact Storage | Filesystem first; S3-compatible later | The VPS is the agent's home. Files, generated code, screenshots, logs, and artifacts should be browsable and portable. |
 | Event/Streaming | Internal append-only event log; WebSocket/SSE/NATS-style streams | Missions, traces, fractals, workers, and UI need live events and replayable history. |
 | Deployment | Docker Compose on a single VPS | Phase 1 target is one self-hosted server where the agent lives, dreams, experiments, and stores identity/memory. |
@@ -150,7 +150,7 @@ Development should mirror the VPS stack with Docker Compose.
 |---------|--------------|------|---------|
 | core | Go | internal | Home orchestrator, event log, mission runtime, policy engine. |
 | dashboard | Node/React | 3000 behind proxy | Normal View and Boring View. |
-| postgres | Postgres + pgvector | 5432 | Durable state, memory metadata, vector search. |
+| storage | SQLite database file/volume | internal | Durable state, memory metadata, trace indexes, FTS/search, and snapshot/backup target. |
 | object-store | filesystem first; MinIO later | internal / 9000 if MinIO | Artifacts, generated code, screenshots, logs. |
 | worker-runner | container runtime | internal | Runs Boring Blocks and Forgery Lab jobs. |
 | whatsapp-adapter | managed provider adapter | internal/webhook | Official/managed WhatsApp communication channel. |
@@ -162,7 +162,7 @@ Phase 1 production target is a single VPS with Docker Compose:
 
 - TLS and reverse proxy.
 - Private internal network for services.
-- Backups for Postgres and artifacts.
+- Backups for SQLite database snapshots and artifacts.
 - Health checks for core, dashboard, workers, adapters.
 - Upgrade protocol with canary and rollback.
 - Logs/traces visible in Boring View.
@@ -246,7 +246,7 @@ Normal View should work on mobile and desktop. Boring View can be desktop-first 
 
 ### Phase 1: Home Server, Memory, Forge, and Normal Channel
 
-- **Build:** Go core orchestrator, Docker Compose VPS stack, Postgres/pgvector schema, event/trace log, dashboard shell, Normal View + Boring View skeleton, official WhatsApp adapter, first-class memory system, Research-for-Action pipeline, Forgery Lab, Boring Block package format, process/container block runner, configurable autonomy policy, endocrine context engine, memory eval harness, and skeletal fractal protocol/bridge.
+- **Build:** Go core orchestrator, Docker Compose VPS stack, SQLite-backed storage adapter schema, event/trace log, dashboard shell, Normal View + Boring View skeleton, official WhatsApp adapter, first-class memory system, Research-for-Action pipeline, Forgery Lab, Boring Block package format, process/container block runner, configurable autonomy policy, endocrine context engine, memory eval harness, and skeletal fractal protocol/bridge.
 - **Testable:** create a mission from WhatsApp; trace it in Boring View; store/promote memories; research an unknown; generate/test/register a simple Boring Block; invoke it; show artifacts in filesystem; show endocrine state; run memory baseline evals; demonstrate rollback-safe self-update simulation.
 - **Outcome:** Boring Agent lives on the VPS, receives a normal-user request, researches for action, forges or uses a capability, completes the workflow, and leaves an inspectable trace.
 

@@ -13,6 +13,7 @@ flowchart TB
 
     Events["Append-only trace log<br/>every thought, tool call, test,<br/>download, approval, and failure"]
     Memory["First-class memory<br/>raw, episodic, semantic,<br/>procedural, reflective, identity"]
+    Evokoa["Evokoa relationship layer<br/>graph traversal over existing<br/>missions, memory, traces, blocks"]
     Endocrine["Endocrine context engine<br/>curiosity, caution, urgency,<br/>confidence, budget pressure"]
 
     Forge["Forgery Lab<br/>research docs and repos<br/>write code, run tests, register tools"]
@@ -23,7 +24,7 @@ flowchart TB
     Fractals["Fractal sessions<br/>Claude Code, ClickThrough,<br/>Hermes, OpenClaw, Codex-style agents"]
 
     Artifacts["Agent filesystem<br/>files, screenshots, logs,<br/>generated code, research notes"]
-    Postgres["Postgres + pgvector<br/>durable state + memory search"]
+    Storage["SQLite-first storage adapter<br/>durable state, FTS/search,<br/>snapshots, future backend swap"]
     Policies["Policy and lease layer<br/>secrets, network, filesystem,<br/>messaging, self-update"]
 
     Human --> Channels
@@ -33,9 +34,11 @@ flowchart TB
 
     Core <--> Events
     Core <--> Memory
+    Memory <--> Evokoa
+    Evokoa <--> Storage
     Core <--> Endocrine
     Core <--> Policies
-    Core <--> Postgres
+    Core <--> Storage
     Core <--> Artifacts
 
     Core --> Forge
@@ -67,7 +70,7 @@ Boring Agent moves the bottleneck into a durable runtime:
 
 ## What makes it boring
 
-The core is intentionally boring: Go, Postgres, Docker Compose, event logs, leases, tests, sandboxes, rollback.
+The core is intentionally boring: Go, SQLite, Docker Compose, event logs, leases, tests, sandboxes, rollback.
 
 The behavior is not boring: the agent can research its own gaps, forge new capabilities, remember what worked, attach to other runtimes, and keep improving without pretending the audit log is optional.
 
